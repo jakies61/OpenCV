@@ -14,15 +14,17 @@ int Camera() {
 	CascadeClassifier face_cascade;
 	face_cascade.load("haarcascade_frontalface_alt.xml");
 	if (!face_cascade.load("haarcascade_frontalface_alt.xml")) {
-		cout << "Nie odnaleziono pliku!\n";
+		cout << "Nie odnaleziono pliku haarcascade_frontalface_alt.xml!\n";
+		return 0;
 	};
 
 	VideoCapture captureDevice;
-	captureDevice.open(0);
-
-	if (!captureDevice.isOpened()) {
-		cout << "Kamera nie zosta³a wykryta\n";
+	captureDevice.open(1);
+	if(!captureDevice.isOpened()) {
+		cout << "Kamera nie jest podlaczona!\n";
+		return 0;
 	};
+
 
 	Mat captureFrame;
 	Mat grayscaleFrame;
@@ -47,22 +49,24 @@ int Camera() {
 		};
 
 		imshow("Kamera", captureFrame);
-
-		waitKey(0);
+		waitKey(1);
 	};
 	return 0;
 }
 
 int Picture() {
+	string plik;
+	cout << "Podaj nazwe pliku, jaki chcesz otworzyc (uwzglednij rozszerzenie takie jak .jpg .jpeg .png): \n";
+	cin >> plik;
 	CascadeClassifier face_cascade;
 	face_cascade.load("haarcascade_frontalface_alt.xml");
 	if (!face_cascade.load("haarcascade_frontalface_alt.xml")) {
 		cout << "Nie odnaleziono pliku!\n";
 	};
 	Mat picture;
-	picture = imread("1.jpg", 1);
+	picture = imread(plik, 1);
 	if (!picture.data) {
-		cout << "Nie odnaleziono pliku w folderze glownym!\n";
+		cout << "Nie odnaleziono pliku w folderze glownym! Sprawdz czy podane przez Ciebie rozszerzenie jest poprawne\n";
 	};
 	namedWindow("Zdjecie", CV_WINDOW_AUTOSIZE);
 
@@ -108,11 +112,14 @@ int WebCamera() {
 			rectangle(captureFrame, pt1, pt2, cvScalar(0, 255, 0, 0), 1, 8, 0);
 		};
 		imshow("WebCamera", captureFrame);
-		waitKey(33);
+		waitKey(1);
 	};
 }
 
 int Video() {
+	string plik;
+	cout << "Podaj nazwe pliku, jaki chcesz otworzyc (uwzglednij rozszerzenie takie jak .avi .mp4 .mkv): \n";
+	cin >> plik;
 	CascadeClassifier face_cascade;
 	face_cascade.load("haarcascade_frontalface_alt2.xml");
 	if (!face_cascade.load("haarcascade_frontalface_alt2.xml")) {
@@ -120,10 +127,9 @@ int Video() {
 	};
 
 	VideoCapture captureMovie;
-	captureMovie.open("1.avi");
-	if (!captureMovie.open("1.avi")) {
-		cout << "Nie odnaleziono pliku!\n";
-		//return -1;
+	captureMovie.open(plik);
+	if (!captureMovie.open(plik)) {
+		cout << "Nie odnaleziono pliku! Sprawdz czy podane przez Ciebie rozszerzenie jest poprawne\n";
 	};
 
 	Mat captureFrame;
@@ -149,7 +155,7 @@ int Video() {
 		};
 
 		imshow("Nagranie", captureFrame);
-		waitKey(0);
+		waitKey(1);
 	};
 	return 0;
 }
@@ -170,6 +176,7 @@ int main() {
 		while ((c = getchar()) != '\n' && c != EOF);
 	}
 
+	system("cls");
 	if (wybor == 1) {
 		Camera();
 	}else if (wybor == 2) {

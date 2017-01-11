@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include <iostream>
-#include <string>
 
 #include "opencv2/objdetect/objdetect.hpp"
 #include "opencv2/highgui/highgui.hpp"
@@ -9,6 +8,9 @@
 
 using namespace cv;
 using namespace std;
+
+
+string sciezka = "data/";
 
 int Camera() {
 	CascadeClassifier face_cascade;
@@ -61,12 +63,14 @@ int Picture() {
 	CascadeClassifier face_cascade;
 	face_cascade.load("haarcascade_frontalface_alt.xml");
 	if (!face_cascade.load("haarcascade_frontalface_alt.xml")) {
-		cout << "Nie odnaleziono pliku!\n";
+		cout << "Nie odnaleziono pliku haarcascade_frontal_face_alt.xml!\n";
+		return 0;
 	};
 	Mat picture;
-	picture = imread(plik, 1);
+	picture = imread(sciezka + plik, 1);
 	if (!picture.data) {
-		cout << "Nie odnaleziono pliku w folderze glownym! Sprawdz czy podane przez Ciebie rozszerzenie jest poprawne\n";
+		cout << "Nie odnaleziono pliku! Sprawdz czy podane przez Ciebie rozszerzenie jest poprawne\n";
+		return 0;
 	};
 	namedWindow("Zdjecie", CV_WINDOW_AUTOSIZE);
 
@@ -87,15 +91,20 @@ int Picture() {
 }
 
 int WebCamera() {
+	string html;
+	cout << "Podaj adres kamery (z uwzglednieniem nazwy klatki \"video.mjpg\"): \n";
+	cin >> html;
 	CascadeClassifier face_cascade;
 	face_cascade.load("haarcascade_frontalface_alt.xml");
 	if (!face_cascade.load("haarcascade_frontalface_alt.xml")) {
-		cout << "Nie odnaleziono pliku!\n";
+		cout << "Nie odnaleziono pliku haarcascade_frontalface_alt.xml!\n";
+		return 0;
 	};
 	VideoCapture captureMovie;
-	captureMovie.open("http://130.215.73.77/mjpg/video.mjpg");
-	if (!captureMovie.open("http://130.215.73.77/mjpg/video.mjpg")) {
-		cout << "Kamera nie jest polaczona!\n";
+	captureMovie.open(html);
+	if (!captureMovie.open(html)) {
+		cout << "Kamera nie jest polaczona lub wprowadzony zosta³ niepoprawny adres!\n";
+		return 0;
 	};
 	Mat captureFrame;
 	Mat grayscaleFrame;
@@ -121,15 +130,17 @@ int Video() {
 	cout << "Podaj nazwe pliku, jaki chcesz otworzyc (uwzglednij rozszerzenie takie jak .avi .mp4 .mkv): \n";
 	cin >> plik;
 	CascadeClassifier face_cascade;
-	face_cascade.load("haarcascade_frontalface_alt2.xml");
-	if (!face_cascade.load("haarcascade_frontalface_alt2.xml")) {
-		cout << "Nie odnaleziono pliku!\n";
+	face_cascade.load("haarcascade_frontalface_alt.xml");
+	if (!face_cascade.load("haarcascade_frontalface_alt.xml")) {
+		cout << "Nie odnaleziono pliku haarcascade_frontalface_alt.xml!\n";
+		return 0;
 	};
 
 	VideoCapture captureMovie;
-	captureMovie.open(plik);
-	if (!captureMovie.open(plik)) {
+	captureMovie.open(sciezka + plik);
+	if (!captureMovie.open(sciezka + plik)) {
 		cout << "Nie odnaleziono pliku! Sprawdz czy podane przez Ciebie rozszerzenie jest poprawne\n";
+		return 0;
 	};
 
 	Mat captureFrame;
